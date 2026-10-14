@@ -126,8 +126,8 @@ The dataset contains 10,000 chronologically ordered observations from a real man
 
 | Variable | Range | Description |
 |---|---|---|
-| `UDI` | 1–10,000 | Unique identifier *(dropped — causes overfitting)* |
-| `Product ID` | — | Machine serial number *(dropped — causes overfitting)* |
+| `UDI` | 1–10,000 | Unique identifier *(dropped, causes overfitting)* |
+| `Product ID` | — | Machine serial number *(dropped, causes overfitting)* |
 | `Type` | L, M, H | Product category: Low / Medium / High speed |
 | `Air Temperature [K]` | 295.3–304.5 | Ambient environment temperature |
 | `Process Temperature [K]` | 305.7–313.8 | Machine operating temperature |
@@ -135,7 +135,7 @@ The dataset contains 10,000 chronologically ordered observations from a real man
 | `Torque [Nm]` | 3.8–76.6 | Load applied to the machine |
 | `Tool Wear [min]` | 0–253 | Cumulative tool usage duration |
 | `Machine Failure` | 0 / 1 | **Target** — binary failure label |
-| `TWF, HDF, PWF, OSF, RNF` | 0 / 1 | Failure mechanism flags *(dropped — data leakage)* |
+| `TWF, HDF, PWF, OSF, RNF` | 0 / 1 | Failure mechanism flags *(dropped, data leakage)* |
 
 ### Class Distribution
 
