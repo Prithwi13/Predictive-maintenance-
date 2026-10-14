@@ -134,7 +134,7 @@ The dataset contains 10,000 chronologically ordered observations from a real man
 | `Rotational Speed [rpm]` | 1,168–2,886 | Spindle rotational velocity |
 | `Torque [Nm]` | 3.8–76.6 | Load applied to the machine |
 | `Tool Wear [min]` | 0–253 | Cumulative tool usage duration |
-| `Machine Failure` | 0 / 1 | **Target** — binary failure label |
+| `Machine Failure` | 0 / 1 | **Target** ,  binary failure label |
 | `TWF, HDF, PWF, OSF, RNF` | 0 / 1 | Failure mechanism flags *(dropped, data leakage)* |
 
 ### Class Distribution
@@ -171,9 +171,9 @@ These features are computed **identically** in both the training pipeline and th
 
 | # | Feature | Formula / Logic | Type | Purpose |
 |---|---|---|---|---|
-| 1 | `power_kw` | `Torque × RPM / 1000` | Continuous | Physical power consumption — high power signals mechanical stress |
-| 2 | `temp_diff_k` | `Process Temp − Air Temp` | Continuous | Operational heat generation — large differential suggests thermal strain |
-| 3 | `torque_speed_ratio` | `Torque / (RPM + ε)` | Continuous | Load-normalized speed — captures heavy load at low speed |
+| 1 | `power_kw` | `Torque × RPM / 1000` | Continuous | Physical power consumption shows high power signals mechanical stress |
+| 2 | `temp_diff_k` | `Process Temp − Air Temp` | Continuous | Operational heat generation, large differential suggests thermal strain |
+| 3 | `torque_speed_ratio` | `Torque / (RPM + ε)` | Continuous | Load-normalized speed captures heavy load at low speed |
 | 4 | `tool_wear_category` | Cut into `{New, Moderate, Worn, Critical}` | Ordered factor | Degradation stage — quartile-based binning of raw wear minutes |
 | 5 | `is_high_torque` | `Torque > 95th percentile (training set)` | Binary flag | Above 95th percentile torque stress condition |
 | 6 | `is_low_speed` | `RPM < 5th percentile (training set)` | Binary flag | Unusually low rotational speed |
