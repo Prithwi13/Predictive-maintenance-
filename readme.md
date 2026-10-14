@@ -20,7 +20,7 @@
 
 <br/>
 
-> A **full production machine learning system** that predicts machine failure risk in real time using the AI4I 2020 manufacturing dataset. Built with an R-based training pipeline, a live **Plumber REST API**, and an interactive **web dashboard** that gives maintenance engineers instant failure risk scores, color-coded alerts, and physics-based sensor readouts — all from a browser.
+> A **full production machine learning system** that predicts machine failure risk in real time using the AI4I 2020 manufacturing dataset. Built with an R-based training pipeline, a live **Plumber REST API**, and an interactive **web dashboard** that gives maintenance engineers instant failure risk scores, color-coded alerts, and physics-based sensor readouts from a browser.
 
 <br/>
 
@@ -63,13 +63,13 @@
 
 ## 🔭 Project Overview
 
-Unplanned machine downtime costs the manufacturing industry billions annually. Traditional time-based maintenance schedules are either too frequent (wasteful) or too infrequent (failure-prone). This project delivers a **condition-based maintenance system** — one that monitors real operational sensor data and predicts failure risk before a breakdown occurs.
+Unplanned machine downtime costs the manufacturing industry billions annually. Traditional time-based maintenance schedules are either too frequent (wasteful) or too infrequent (failure-prone). This project delivers a **condition-based maintenance system** that monitors real operational sensor data and predicts failure risk before a breakdown occurs.
 
 The system answers three research questions:
 
-1. **Can machine failures be predicted accurately from sensor data?** Yes — XGBoost achieves an F1-score of 0.625 and AUC of 0.949 on held-out test data.
-2. **Which operational parameters most predict failure?** Torque (r = 0.19), tool wear (r = 0.11), and air temperature (r = 0.08) are the dominant drivers.
-3. **Can a real-time predictive system be deployed for practical use?** Yes — the trained model is packaged as a live REST API and served through an interactive web dashboard requiring no installation.
+1. **Can machine failures be predicted accurately from sensor data?** Yes, XGBoost achieves an F1-score of 0.625 and AUC of 0.949 on held-out test data.
+2. **Which operational parameters most predict failure?** Torque (r = 0.19), machine tool wear (r = 0.11), and air temperature (r = 0.08) are the dominant drivers.
+3. **Can a real-time predictive system be deployed for practical use?** Yes, the trained model is packaged as a live REST API and served through an interactive web dashboard requiring no installation.
 
 ### What the System Delivers
 
@@ -167,7 +167,7 @@ Without intervention, any classifier achieves 96% accuracy by predicting "No Fai
 
 Seven domain-informed features are constructed on top of the raw sensor readings, capturing physics-based relationships, operational stress conditions, and tool degradation signals that raw sensors alone cannot express.
 
-These features are computed **identically** in both the training pipeline and the live API — a critical design requirement to prevent training-serving skew.
+These features are computed **identically** in both the training pipeline and the live API which is a  critical design requirement to prevent training-serving skew.
 
 | # | Feature | Formula / Logic | Type | Purpose |
 |---|---|---|---|---|
@@ -187,7 +187,7 @@ These features are computed **identically** in both the training pipeline and th
 
 ### Data Preprocessing
 
-**Leakage prevention — two layers:**
+**Leakage prevention (two layers):**
 
 1. **Column removal:** `UDI` and `Product ID` are dropped (unique identifiers that cause overfitting). The five failure mechanism flags (`TWF`, `HDF`, `PWF`, `OSF`, `RNF`) are also dropped because they are consequences of failure, not precursors. Using them would constitute direct data leakage.
 
@@ -205,7 +205,7 @@ test_raw  <- data_cleaned[(split_index+1):nrow(data_cleaned), ]
 
 The 1:28 class imbalance is addressed using **upsampling within each cross-validation fold** (`sampling = "up"` in `trainControl`):
 
-- Applied **inside** each fold, not before splitting — preventing inflated CV scores
+- Applied **inside** each fold, not before splitting and preventing inflated CV scores
 - Ensures the model learns genuine failure patterns rather than exploiting majority-class frequency
 - The primary training metric is **Sensitivity (Recall)**, prioritising failure detection over false-alarm reduction
 
@@ -237,7 +237,7 @@ tuneGrid_xgb <- expand.grid(
 )
 ```
 
-**Champion selection:** The winning model is selected by **F1-Score on the held-out test set** — the correct metric for imbalanced classification, balancing precision and recall. The winner is saved as `best_model.rds`.
+**Champion selection:** The winning model is selected by **F1-Score on the held-out test set** which is the correct metric for imbalanced classification, balancing precision and recall. The winner is saved as `best_model.rds`.
 
 ### Model Performance Results
 
@@ -249,7 +249,7 @@ tuneGrid_xgb <- expand.grid(
 
 **Why XGBoost wins:**
 
-XGBoost's F1-Score of 0.625 is **40% better than Decision Tree** and **112% better than GLMNET**. Its precision of 0.686 means 68.6% of flagged machines will genuinely fail — critical for avoiding alert fatigue. At a 10% false positive rate, XGBoost achieves ~98% sensitivity versus GLMNET's 90%, meaning 8 additional real failures caught per 100. The Decision Tree catches slightly more failures in aggregate (sensitivity 0.672 vs 0.574) but generates **triple the false alarms** (precision 0.336 vs 0.686) — in practice this erodes maintenance team trust and leads to predictions being ignored.
+XGBoost's F1-Score of 0.625 is **40% better than Decision Tree** and **112% better than GLMNET**. Its precision of 0.686 means 68.6% of flagged machines will genuinely fail which is critical for avoiding alert fatigue. At a 10% false positive rate, XGBoost achieves ~98% sensitivity versus GLMNET's 90%, meaning 8 additional real failures caught per 100. The Decision Tree catches slightly more failures in aggregate (sensitivity 0.672 vs 0.574) but generates **triple the false alarms** (precision 0.336 vs 0.686), in practice this erodes maintenance team trust and leads to predictions being ignored.
 
 ---
 
@@ -257,7 +257,7 @@ XGBoost's F1-Score of 0.625 is **40% better than Decision Tree** and **112% bett
 
 **File:** `Plumber_API_for_Model_1.R`
 
-The trained XGBoost model is served as a production REST API using R's `{plumber}` package. The API is fully self-contained — it loads the three serialized artifacts at startup and exposes a single prediction endpoint.
+The trained XGBoost model is served as a production REST API using R's `{plumber}` package. The API is fully self-contained and it loads the three serialized artifacts at startup and exposes a single prediction endpoint.
 
 ### Startup Sequence
 
@@ -329,7 +329,7 @@ The API will be live at `http://127.0.0.1:19894`.
 
 **File:** `index_1.html`
 
-The dashboard is a **single self-contained HTML file** — no server, no framework install, no build step required. Open it directly in any modern browser. It is built with **Tailwind CSS** and vanilla JavaScript on a dark-mode UI with gradient accents, smooth CSS animations, staggered card fade-ins, and a consistent three-tier color risk system.
+The dashboard is a **single self-contained HTML file** no server, no framework install, no build step required. Open it directly in any modern browser. It is built with **Tailwind CSS** and vanilla JavaScript on a dark-mode UI with gradient accents, smooth CSS animations, staggered card fade-ins, and a consistent three-tier color risk system.
 
 ### How to Launch
 
